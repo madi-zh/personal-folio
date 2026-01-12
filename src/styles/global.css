@@ -1,15 +1,37 @@
 @import "tailwindcss";
 
 @theme {
-  --color-background: #0a0a0a;
-  --color-surface: #141414;
-  --color-border: #262626;
-  --color-text-primary: #fafafa;
-  --color-text-secondary: #a1a1a1;
-  --color-accent: #8b5cf6;
-  --color-accent-hover: #a78bfa;
-
   --font-sans: "Inter", system-ui, -apple-system, sans-serif;
+
+  --color-background: var(--bg);
+  --color-surface: var(--surface);
+  --color-border: var(--border);
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+}
+
+/* Dark theme (default) */
+:root {
+  --bg: #0a0a0a;
+  --surface: #141414;
+  --border: #262626;
+  --text-primary: #fafafa;
+  --text-secondary: #a1a1a1;
+  --accent: #8b5cf6;
+  --accent-hover: #a78bfa;
+}
+
+/* Light theme */
+:root.light {
+  --bg: #fafafa;
+  --surface: #ffffff;
+  --border: #e5e5e5;
+  --text-primary: #171717;
+  --text-secondary: #525252;
+  --accent: #7c3aed;
+  --accent-hover: #6d28d9;
 }
 
 @layer base {
@@ -19,6 +41,7 @@
 
   body {
     @apply bg-background text-text-primary font-sans antialiased;
+    transition: background-color 0.15s ease, color 0.15s ease;
   }
 
   ::selection {
