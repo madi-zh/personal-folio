@@ -1,43 +1,72 @@
-# Astro Starter Kit: Minimal
+# Personal Portfolio
 
-```sh
-npm create astro@latest -- --template minimal
+A modern, responsive portfolio website built with Astro, featuring an AI-powered chat assistant.
+
+## Tech Stack
+
+- **Framework:** Astro 5
+- **UI Components:** React 18
+- **Styling:** Tailwind CSS 4
+- **Chat:** Server-Sent Events (SSE) streaming with markdown support
+
+## Features
+
+- Responsive design with dark/light theme toggle
+- AI chat assistant with real-time streaming responses
+- Markdown rendering in chat messages
+- Chat history persistence using IndexedDB
+- Deployed to GitHub Pages
+
+## Project Structure
+
+```
+src/
+├── components/
+│   ├── chat/           # Chat widget components
+│   │   ├── ChatWidget.tsx
+│   │   ├── ChatMessage.tsx
+│   │   ├── ChatInput.tsx
+│   │   └── SuggestedQuestions.tsx
+│   ├── Hero.astro
+│   ├── About.astro
+│   ├── Experience.astro
+│   ├── Contact.astro
+│   └── ...
+├── layouts/
+│   └── Layout.astro
+├── lib/
+│   ├── chatApi.ts      # SSE streaming API client
+│   └── chatStorage.ts  # IndexedDB persistence
+├── styles/
+│   └── global.css
+└── pages/
+    └── index.astro
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+## Getting Started
 
-## 🚀 Project Structure
+```bash
+# Install dependencies
+npm install
 
-Inside of your Astro project, you'll see the following folders and files:
+# Start dev server
+npm run dev
 
-```text
-/
-├── public/
-├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
+# Build for production
+npm run build
+
+# Preview production build
+npm run preview
 ```
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+## Environment Variables
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+Create a `.env` file for local development:
 
-Any static assets, like images, can be placed in the `public/` directory.
+```
+PUBLIC_CHAT_API_URL=http://localhost:8000
+```
 
-## 🧞 Commands
+## Related
 
-All commands are run from the root of the project, from a terminal:
-
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+- [Portfolio Assistant](../portfolio-assistant) - Backend API for the chat assistant
