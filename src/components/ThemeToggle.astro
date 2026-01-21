@@ -7,7 +7,7 @@
   aria-label="Toggle theme"
   class="p-2 rounded-lg text-text-secondary hover:text-text-primary hover:bg-surface transition-colors"
 >
-  <!-- Sun icon (shown in dark mode) -->
+  <!-- Sun icon (shown in dark mode, click to go to light) -->
   <svg
     id="sun-icon"
     class="w-5 h-5 hidden"
@@ -23,7 +23,23 @@
     />
   </svg>
 
-  <!-- Moon icon (shown in light mode) -->
+  <!-- Droplet icon (shown in light mode, click to go to glass) -->
+  <svg
+    id="droplet-icon"
+    class="w-5 h-5 hidden"
+    fill="none"
+    stroke="currentColor"
+    viewBox="0 0 24 24"
+  >
+    <path
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      stroke-width="2"
+      d="M12 21c-4.418 0-8-3.582-8-8 0-4 8-11 8-11s8 7 8 11c0 4.418-3.582 8-8 8z"
+    />
+  </svg>
+
+  <!-- Moon icon (shown in glass mode, click to go to dark) -->
   <svg
     id="moon-icon"
     class="w-5 h-5 hidden"
@@ -44,30 +60,59 @@
   function initThemeToggle() {
     const toggle = document.getElementById('theme-toggle');
     const sunIcon = document.getElementById('sun-icon');
+    const dropletIcon = document.getElementById('droplet-icon');
     const moonIcon = document.getElementById('moon-icon');
 
-    if (!toggle || !sunIcon || !moonIcon) return;
+    if (!toggle || !sunIcon || !dropletIcon || !moonIcon) return;
 
-    function updateIcons() {
-      const isLight = document.documentElement.classList.contains('light');
-      sunIcon.classList.toggle('hidden', isLight);
-      moonIcon.classList.toggle('hidden', !isLight);
+    function getCurrentTheme(): 'dark' | 'light' | 'glass' {
+      if (document.documentElement.classList.contains('light')) return 'light';
+      if (document.documentElement.classList.contains('glass')) return 'glass';
+      return 'dark';
     }
 
-    function toggleTheme() {
-      const isLight = document.documentElement.classList.toggle('light');
-      localStorage.setItem('theme', isLight ? 'light' : 'dark');
+    function setTheme(theme: 'dark' | 'light' | 'glass') {
+      document.documentElement.classList.remove('light', 'glass');
+      if (theme === 'light') {
+        document.documentElement.classList.add('light');
+      } else if (theme === 'glass') {
+        document.documentElement.classList.add('glass');
+      }
+      localStorage.setItem('theme', theme);
+    }
+
+    function updateIcons() {
+      const theme = getCurrentTheme();
+      // Show sun in dark mode (clicking will go to light)
+      sunIcon.classList.toggle('hidden', theme !== 'dark');
+      // Show droplet in light mode (clicking will go to glass)
+      dropletIcon.classList.toggle('hidden', theme !== 'light');
+      // Show moon in glass mode (clicking will go to dark)
+      moonIcon.classList.toggle('hidden', theme !== 'glass');
+    }
+
+    function cycleTheme() {
+      const current = getCurrentTheme();
+      // Cycle: dark → light → glass → dark
+      if (current === 'dark') {
+        setTheme('light');
+      } else if (current === 'light') {
+        setTheme('glass');
+      } else {
+        setTheme('dark');
+      }
       updateIcons();
     }
 
-    toggle.addEventListener('click', toggleTheme);
+    toggle.addEventListener('click', cycleTheme);
     updateIcons();
 
     window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
       if (!localStorage.getItem('theme')) {
         if (e.matches) {
-          document.documentElement.classList.remove('light');
+          document.documentElement.classList.remove('light', 'glass');
         } else {
+          document.documentElement.classList.remove('glass');
           document.documentElement.classList.add('light');
         }
         updateIcons();

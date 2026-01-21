@@ -20,31 +20,39 @@ const socialLinks = [
 
 <section class="min-h-screen flex items-center justify-center pt-16">
   <div class="max-w-5xl mx-auto px-6 py-20">
-    <div class="space-y-6">
-      <p class="text-accent font-medium">Hi, my name is</p>
-      <h1 class="text-5xl md:text-7xl font-bold text-text-primary">
-        Madi Zhanbyrtayev
-      </h1>
-      <h2 class="text-3xl md:text-5xl font-bold text-text-secondary">
-        I build robust backend systems & AI solutions.
-      </h2>
-      <p class="max-w-xl text-text-secondary text-lg leading-relaxed">
-        Senior Software Engineer with 6+ years of experience in backend development,
-        cloud infrastructure, and machine learning. I design scalable architectures
-        and lead teams to deliver impactful solutions.
-      </p>
-      <div class="flex items-center gap-4 pt-4">
-        {socialLinks.map((link) => (
-          <a
-            href={link.href}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label={link.label}
-            class="text-text-secondary hover:text-accent transition-colors p-2"
-          >
-            <Fragment set:html={link.icon} />
-          </a>
-        ))}
+    <div class="glass-card p-8 md:p-12">
+      <div class="glass-filter"></div>
+      <div class="glass-distortion-overlay"></div>
+      <div class="glass-overlay"></div>
+      <div class="glass-specular"></div>
+      <div class="glass-content">
+        <div class="space-y-6">
+          <p class="text-accent font-medium">Hi, my name is</p>
+          <h1 class="text-5xl md:text-7xl font-bold text-text-primary">
+            Madi Zhanbyrtayev
+          </h1>
+          <h2 class="text-3xl md:text-5xl font-bold text-text-secondary">
+            I build robust backend systems & AI solutions.
+          </h2>
+          <p class="max-w-xl text-text-secondary text-lg leading-relaxed">
+            Senior Software Engineer with 6+ years of experience in backend development,
+            cloud infrastructure, and machine learning. I design scalable architectures
+            and lead teams to deliver impactful solutions.
+          </p>
+          <div class="flex items-center gap-4 pt-4">
+            {socialLinks.map((link) => (
+              <a
+                href={link.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={link.label}
+                class="text-text-secondary hover:text-accent transition-colors p-2"
+              >
+                <Fragment set:html={link.icon} />
+              </a>
+            ))}
+          </div>
+        </div>
       </div>
     </div>
   </div>

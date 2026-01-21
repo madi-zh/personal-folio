@@ -34,6 +34,17 @@
   --accent-hover: #6d28d9;
 }
 
+/* Liquid Glass theme */
+:root.glass {
+  --bg: rgba(15, 15, 20, 0.75);
+  --surface: rgba(255, 255, 255, 0.08);
+  --border: rgba(255, 255, 255, 0.15);
+  --text-primary: rgba(255, 255, 255, 0.95);
+  --text-secondary: rgba(255, 255, 255, 0.6);
+  --accent: #a78bfa;
+  --accent-hover: #c4b5fd;
+}
+
 @layer base {
   html {
     scroll-behavior: smooth;
@@ -44,7 +55,138 @@
     transition: background-color 0.15s ease, color 0.15s ease;
   }
 
+  :root.glass body {
+    background-color: #0a0a0f;
+    background-image:
+      /* Purple blob - top left */
+      radial-gradient(ellipse 80% 50% at 10% 20%, rgba(139, 92, 246, 0.4) 0%, transparent 50%),
+      /* Blue blob - top right */
+      radial-gradient(ellipse 60% 40% at 85% 15%, rgba(59, 130, 246, 0.35) 0%, transparent 50%),
+      /* Pink/magenta blob - center left */
+      radial-gradient(ellipse 50% 60% at 5% 60%, rgba(236, 72, 153, 0.3) 0%, transparent 50%),
+      /* Cyan blob - center right */
+      radial-gradient(ellipse 70% 50% at 90% 50%, rgba(34, 211, 238, 0.25) 0%, transparent 50%),
+      /* Purple blob - bottom center */
+      radial-gradient(ellipse 80% 40% at 50% 95%, rgba(168, 85, 247, 0.35) 0%, transparent 50%),
+      /* Teal accent - bottom left */
+      radial-gradient(ellipse 40% 30% at 20% 85%, rgba(20, 184, 166, 0.25) 0%, transparent 50%),
+      /* Blue accent - bottom right */
+      radial-gradient(ellipse 50% 40% at 75% 80%, rgba(99, 102, 241, 0.3) 0%, transparent 50%);
+    background-attachment: fixed;
+  }
+
   ::selection {
     @apply bg-accent/30 text-text-primary;
+  }
+}
+
+@layer components {
+  .glass-panel {
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  }
+
+  /* Glass Card - Only active in glass theme */
+  :root.glass .glass-card {
+    --bg-color: rgba(255, 255, 255, 0.12);
+    --highlight: rgba(255, 255, 255, 0.5);
+    position: relative;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.2);
+  }
+
+  :root.glass .glass-filter,
+  :root.glass .glass-overlay,
+  :root.glass .glass-specular {
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+  }
+
+  :root.glass .glass-filter {
+    z-index: 1;
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    filter: url(#glass-distortion) saturate(120%) brightness(1.15);
+  }
+
+  :root.glass .glass-distortion-overlay {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 20% 30%, rgba(255,255,255,0.05) 0%, transparent 80%),
+                radial-gradient(circle at 80% 70%, rgba(255,255,255,0.05) 0%, transparent 80%);
+    background-size: 300% 300%;
+    animation: floatDistort 10s infinite ease-in-out;
+    mix-blend-mode: overlay;
+    z-index: 2;
+    pointer-events: none;
+  }
+
+  :root.glass .glass-overlay {
+    z-index: 2;
+    background: var(--bg-color);
+  }
+
+  :root.glass .glass-specular {
+    z-index: 3;
+    box-shadow: inset 1px 1px 1px var(--highlight);
+  }
+
+  :root.glass .glass-content {
+    position: relative;
+    z-index: 4;
+  }
+
+  /* Non-glass themes: card is transparent */
+  :root:not(.glass) .glass-card {
+    background: transparent;
+    box-shadow: none;
+  }
+
+  :root:not(.glass) .glass-filter,
+  :root:not(.glass) .glass-overlay,
+  :root:not(.glass) .glass-specular,
+  :root:not(.glass) .glass-distortion-overlay {
+    display: none;
+  }
+}
+
+@keyframes floatDistort {
+  0% { background-position: 0% 0%; }
+  50% { background-position: 100% 100%; }
+  100% { background-position: 0% 0%; }
+}
+
+/* Glass theme header enhancement */
+:root.glass header {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Glass theme inputs */
+:root.glass input,
+:root.glass textarea {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+:root.glass input:focus,
+:root.glass textarea:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px rgba(167, 139, 250, 0.2);
+}
+
+/* Browser fallback for backdrop-filter */
+@supports not (backdrop-filter: blur(1px)) {
+  :root.glass {
+    --bg: rgba(15, 15, 20, 0.95);
+    --surface: rgba(30, 30, 40, 0.95);
   }
 }

@@ -25,13 +25,25 @@ const { title, description = "Senior Software Engineer with 6+ years of experien
       (function() {
         const stored = localStorage.getItem('theme');
         const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        if (stored === 'light' || (!stored && !prefersDark)) {
+        document.documentElement.classList.remove('light', 'glass');
+        if (stored === 'light') {
+          document.documentElement.classList.add('light');
+        } else if (stored === 'glass') {
+          document.documentElement.classList.add('glass');
+        } else if (!stored && !prefersDark) {
           document.documentElement.classList.add('light');
         }
       })();
     </script>
   </head>
   <body class="min-h-screen">
+    <!-- SVG Filter for Glass Distortion -->
+    <svg style="display: none" aria-hidden="true">
+      <filter id="glass-distortion">
+        <feTurbulence type="turbulence" baseFrequency="0.008" numOctaves="2" result="noise" />
+        <feDisplacementMap in="SourceGraphic" in2="noise" scale="7" />
+      </filter>
+    </svg>
     <slot />
     <ChatWidget client:load />
   </body>
