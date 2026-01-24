@@ -5,8 +5,8 @@ import tailwindcss from '@tailwindcss/vite';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://madi-zh.github.io',
-  base: '/personal-folio',
+  site: 'https://zhanbyrtayev.dev',
+  // base: '/personal-folio', // Only needed for GitHub Pages subdirectory deployment
   integrations: [react()],
   devToolbar: {
     enabled: false
