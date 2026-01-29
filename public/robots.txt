@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://zhanbyrtayev.dev/sitemap-index.xml

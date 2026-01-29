@@ -1,0 +1,81 @@
+---
+import { getCollection } from 'astro:content';
+
+const projects = await getCollection('projects');
+const sortedProjects = projects.sort((a, b) => a.data.order - b.data.order);
+---
+
+<section id="projects" class="py-24">
+  <div class="max-w-5xl mx-auto px-6">
+    <h2 class="text-2xl font-bold text-text-primary mb-8 flex items-center gap-4">
+      <span class="text-accent font-mono text-lg">02.</span>
+      Featured Projects
+      <span class="h-px bg-border flex-1 max-w-xs"></span>
+    </h2>
+
+    <div class="grid gap-6">
+      {sortedProjects.map((project) => (
+        <a
+          href={`/projects/${project.slug}`}
+          class="group block p-6 bg-surface border border-border rounded-lg hover:border-accent/50 transition-all duration-200"
+        >
+          <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-4 mb-4">
+            <div>
+              <h3 class="text-lg font-semibold text-text-primary group-hover:text-accent transition-colors">
+                {project.data.title}
+              </h3>
+              <p class="text-sm text-text-secondary mt-1">
+                {project.data.role} · {project.data.period}
+              </p>
+            </div>
+            {project.data.metrics && (
+              <div class="flex flex-wrap gap-3 text-sm">
+                {project.data.metrics.contribution && (
+                  <span class="px-2 py-1 bg-accent/10 text-accent rounded">
+                    {project.data.metrics.contribution} contribution
+                  </span>
+                )}
+                {project.data.metrics.users && (
+                  <span class="px-2 py-1 bg-accent/10 text-accent rounded">
+                    {project.data.metrics.users}
+                  </span>
+                )}
+                {project.data.metrics.commits && (
+                  <span class="px-2 py-1 bg-background text-text-secondary rounded border border-border">
+                    {project.data.metrics.commits} commits
+                  </span>
+                )}
+              </div>
+            )}
+          </div>
+
+          <p class="text-text-secondary text-sm mb-4 line-clamp-2">
+            {project.data.description}
+          </p>
+
+          <ul class="space-y-1 mb-4">
+            {project.data.highlights.slice(0, 2).map((highlight) => (
+              <li class="text-sm text-text-secondary flex items-start gap-2">
+                <span class="text-accent mt-1">▹</span>
+                <span class="line-clamp-1">{highlight}</span>
+              </li>
+            ))}
+          </ul>
+
+          <div class="flex flex-wrap gap-2">
+            {project.data.tech.slice(0, 6).map((tech) => (
+              <span class="text-xs px-2 py-1 bg-background text-text-secondary rounded border border-border">
+                {tech}
+              </span>
+            ))}
+            {project.data.tech.length > 6 && (
+              <span class="text-xs px-2 py-1 text-text-secondary">
+                +{project.data.tech.length - 6} more
+              </span>
+            )}
+          </div>
+        </a>
+      ))}
+    </div>
+  </div>
+</section>

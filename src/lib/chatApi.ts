@@ -2,6 +2,54 @@ import type { ChatMessage, ChatRequest } from '../types/chat';
 
 const API_URL = import.meta.env.PUBLIC_CHAT_API_URL || 'http://localhost:8000';
 
+const SUGGESTIONS_CACHE_KEY = 'portfolio_chat_suggestions';
+const SUGGESTIONS_CACHE_TTL = 60 * 60 * 1000; // 1 hour in milliseconds
+
+interface CachedSuggestions {
+  suggestions: string[];
+  timestamp: number;
+}
+
+export async function fetchSuggestions(): Promise<string[]> {
+  // Check cache first
+  try {
+    const cached = localStorage.getItem(SUGGESTIONS_CACHE_KEY);
+    if (cached) {
+      const { suggestions, timestamp }: CachedSuggestions = JSON.parse(cached);
+      if (Date.now() - timestamp < SUGGESTIONS_CACHE_TTL) {
+        return suggestions;
+      }
+    }
+  } catch {
+    // Cache read failed, continue to fetch
+  }
+
+  // Fetch from API
+  try {
+    const response = await fetch(`${API_URL}/suggestions`);
+    if (!response.ok) {
+      throw new Error('Failed to fetch suggestions');
+    }
+    const data = await response.json();
+    const suggestions = data.suggestions as string[];
+
+    // Cache the result
+    try {
+      localStorage.setItem(
+        SUGGESTIONS_CACHE_KEY,
+        JSON.stringify({ suggestions, timestamp: Date.now() })
+      );
+    } catch {
+      // Cache write failed, ignore
+    }
+
+    return suggestions;
+  } catch {
+    // Return empty array on error, component will use fallback
+    return [];
+  }
+}
+
 export async function sendMessageStream(
   message: string,
   history: ChatMessage[],

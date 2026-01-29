@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import type { ChatMessage as ChatMessageType } from '../../types/chat';
 import { getAllMessages, addMessage, clearHistory, generateId } from '../../lib/chatStorage';
 import { sendMessageStream } from '../../lib/chatApi';
+import { trackChatOpen, trackChatMessage, trackSuggestionClick } from '../../lib/analytics';
 import ChatMessage from './ChatMessage';
 import ChatInput from './ChatInput';
 import SuggestedQuestions from './SuggestedQuestions';
@@ -21,8 +22,12 @@ export default function ChatWidget() {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
-  const handleSend = async (content: string) => {
+  const handleSend = async (content: string, fromSuggestion = false) => {
     setError(null);
+    trackChatMessage();
+    if (fromSuggestion) {
+      trackSuggestionClick(content);
+    }
 
     const userMessage: ChatMessageType = {
       id: generateId(),
@@ -81,7 +86,10 @@ export default function ChatWidget() {
     <>
       {/* Floating Button */}
       <button
-        onClick={() => setIsOpen(!isOpen)}
+        onClick={() => {
+          if (!isOpen) trackChatOpen();
+          setIsOpen(!isOpen);
+        }}
         className="fixed bottom-6 right-6 w-14 h-14 bg-accent hover:bg-accent-hover
                    text-white rounded-full shadow-lg transition-all duration-300
                    flex items-center justify-center z-50 hover:scale-105"
@@ -129,7 +137,7 @@ export default function ChatWidget() {
                     Ask me anything about Madi's experience and skills.
                   </p>
                 </div>
-                <SuggestedQuestions onSelect={handleSend} />
+                <SuggestedQuestions onSelect={(q) => handleSend(q, true)} />
               </div>
             ) : (
               <>

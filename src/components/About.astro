@@ -1,5 +1,5 @@
 ---
-
+import TechStack from './TechStack.astro';
 ---
 
 <section id="about" class="py-24">
@@ -34,32 +34,7 @@
 
       <div class="space-y-4">
         <p class="text-text-primary font-medium">Technologies I work with:</p>
-        <ul class="grid grid-cols-2 gap-2 text-sm text-text-secondary">
-          <li class="flex items-center gap-2">
-            <span class="text-accent">▹</span> Python
-          </li>
-          <li class="flex items-center gap-2">
-            <span class="text-accent">▹</span> Rust
-          </li>
-          <li class="flex items-center gap-2">
-            <span class="text-accent">▹</span> Go
-          </li>
-          <li class="flex items-center gap-2">
-            <span class="text-accent">▹</span> FastAPI
-          </li>
-          <li class="flex items-center gap-2">
-            <span class="text-accent">▹</span> LangChain
-          </li>
-          <li class="flex items-center gap-2">
-            <span class="text-accent">▹</span> AWS
-          </li>
-          <li class="flex items-center gap-2">
-            <span class="text-accent">▹</span> PostgreSQL
-          </li>
-          <li class="flex items-center gap-2">
-            <span class="text-accent">▹</span> Docker
-          </li>
-        </ul>
+        <TechStack />
       </div>
     </div>
   </div>

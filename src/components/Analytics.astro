@@ -1,0 +1,52 @@
+---
+/**
+ * Umami Analytics Integration
+ *
+ * To use this component:
+ * 1. Deploy Umami (https://umami.is) to your preferred platform (Vercel, Railway, etc.)
+ * 2. Create a website in Umami dashboard and get the website ID
+ * 3. Set the following environment variables:
+ *    - PUBLIC_UMAMI_WEBSITE_ID: Your Umami website ID
+ *    - PUBLIC_UMAMI_URL: Your Umami instance URL (e.g., https://analytics.yourdomain.com)
+ *
+ * Umami is privacy-focused, doesn't use cookies, and is GDPR compliant.
+ */
+
+const umamiWebsiteId = import.meta.env.PUBLIC_UMAMI_WEBSITE_ID;
+const umamiUrl = import.meta.env.PUBLIC_UMAMI_URL;
+const isDev = import.meta.env.DEV;
+---
+
+{umamiWebsiteId && umamiUrl && !isDev && (
+  <script
+    defer
+    src={`${umamiUrl}/script.js`}
+    data-website-id={umamiWebsiteId}
+  />
+)}
+
+{/* Web Vitals tracking - only in production */}
+{!isDev && (
+  <script>
+    // Core Web Vitals tracking
+    // Reports CLS, INP, LCP metrics
+    import('web-vitals').then(({ onCLS, onINP, onLCP }) => {
+      const reportMetric = (metric) => {
+        // Log to console in dev, send to Umami in production
+        if (typeof umami !== 'undefined') {
+          umami.track('web-vital', {
+            name: metric.name,
+            value: Math.round(metric.value),
+            rating: metric.rating,
+          });
+        }
+      };
+
+      onCLS(reportMetric);
+      onINP(reportMetric);
+      onLCP(reportMetric);
+    }).catch(() => {
+      // web-vitals not available, skip
+    });
+  </script>
+)}
