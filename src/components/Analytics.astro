@@ -1,28 +1,27 @@
 ---
 /**
- * Umami Analytics Integration
+ * Google Analytics (GA4) Integration
  *
- * To use this component:
- * 1. Deploy Umami (https://umami.is) to your preferred platform (Vercel, Railway, etc.)
- * 2. Create a website in Umami dashboard and get the website ID
- * 3. Set the following environment variables:
- *    - PUBLIC_UMAMI_WEBSITE_ID: Your Umami website ID
- *    - PUBLIC_UMAMI_URL: Your Umami instance URL (e.g., https://analytics.yourdomain.com)
- *
- * Umami is privacy-focused, doesn't use cookies, and is GDPR compliant.
+ * To use:
+ * 1. Go to analytics.google.com and create a GA4 property
+ * 2. Get your Measurement ID (looks like G-XXXXXXXXXX)
+ * 3. Set environment variable: PUBLIC_GA_MEASUREMENT_ID=G-XXXXXXXXXX
  */
 
-const umamiWebsiteId = import.meta.env.PUBLIC_UMAMI_WEBSITE_ID;
-const umamiUrl = import.meta.env.PUBLIC_UMAMI_URL;
+const gaMeasurementId = import.meta.env.PUBLIC_GA_MEASUREMENT_ID;
 const isDev = import.meta.env.DEV;
 ---
 
-{umamiWebsiteId && umamiUrl && !isDev && (
-  <script
-    defer
-    src={`${umamiUrl}/script.js`}
-    data-website-id={umamiWebsiteId}
-  />
+{gaMeasurementId && !isDev && (
+  <>
+    <script async src={`https://www.googletagmanager.com/gtag/js?id=${gaMeasurementId}`}></script>
+    <script is:inline define:vars={{ gaMeasurementId }}>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', gaMeasurementId);
+    </script>
+  </>
 )}
 
 {/* Web Vitals tracking - only in production */}
